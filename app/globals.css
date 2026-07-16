@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* PRD Bölüm 5 renk/spacing token'ları — tek merkezi kaynak */
+:root {
+  --color-navy: #0f2a43;
+  --color-navy-alt: #0b3b4a;
+  --color-accent: #e86a33;
+  --color-accent-hover: #cf5622;
+  --color-teal: #4fa69a;
+  --color-sand: #f7f4ef;
+  --color-surface: #ffffff;
+  --color-ink: #1a1a1a;
+  --color-muted: #5b6672;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-sand);
+  color: var(--color-ink);
+  font-size: 16px;
+}
+
+/* Klavye odağı her zaman görünür kalmalı (Bölüm 9) */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}

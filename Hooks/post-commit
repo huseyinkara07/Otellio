@@ -1,0 +1,20 @@
+#!/bin/sh
+# Git post-commit hook - her commit'ten hemen sonra calisir.
+# Git post-commit hook'un exit kodunu dikkate almaz; bu yuzden burada hicbir
+# kontrol commit'i geri almaz/durdurmaz. Amac, push anini beklemeden erken
+# uyari vermek (surekli/duzenli kontrol).
+# Kurallar: Hooks/COMPATIBILITY_RULES.md
+# Kurulum: Hooks/README.md ("git config core.hooksPath Hooks")
+
+hooks_dir="$(CDPATH= cd -- "$(dirname "$0")" && pwd)"
+. "$hooks_dir/lib/checks.sh"
+
+echo "== Post-commit kontrolleri (bilgilendirme amacli, commit'i etkilemez) =="
+
+run_lint        || echo "   -> 'npm run lint' ile detaylara bak."
+run_typecheck   || echo "   -> 'npm run type-check' ile detaylara bak."
+run_dependency_check
+run_env_sync_check
+
+echo "== Post-commit kontrolleri tamamlandi =="
+exit 0

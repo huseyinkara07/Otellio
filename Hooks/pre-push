@@ -1,0 +1,31 @@
+#!/bin/sh
+# Git pre-push hook - GitHub'a push edilmeden hemen once calisir.
+# Kontrollerden biri bile basarisiz olursa push durur (exit != 0).
+# Kurallar: Hooks/GIT_PUSH_RULES.md
+# Kurulum: Hooks/README.md ("git config core.hooksPath Hooks")
+
+hooks_dir="$(CDPATH= cd -- "$(dirname "$0")" && pwd)"
+. "$hooks_dir/lib/checks.sh"
+
+echo "== Pre-push kontrolleri baslatiliyor =="
+
+if ! run_lint; then
+  echo ""
+  echo "PUSH ENGELLENDI: lint hatasi var. Duzeltip tekrar dene ('npm run lint')."
+  exit 1
+fi
+
+if ! run_typecheck; then
+  echo ""
+  echo "PUSH ENGELLENDI: tip hatasi var. Duzeltip tekrar dene ('npm run type-check')."
+  exit 1
+fi
+
+if ! run_build; then
+  echo ""
+  echo "PUSH ENGELLENDI: build basarisiz. Duzeltip tekrar dene ('npm run build')."
+  exit 1
+fi
+
+echo "== Tum pre-push kontrolleri gecti, push devam ediyor =="
+exit 0
