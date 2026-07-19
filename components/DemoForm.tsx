@@ -245,7 +245,12 @@ function DemoFormFields({
           />
           <span>
             {demo.kvkkText}{" "}
-            <a href="#" className="underline hover:font-semibold">
+            <a
+              href={demo.kvkkLinkHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:font-semibold"
+            >
               {demo.kvkkLinkText}
             </a>
           </span>
