@@ -1,8 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Menu, X } from "lucide-react";
-import { navLinks, ctaLabel, demoAnchor, siteConfig } from "@/lib/content";
+import {
+  navLinks,
+  ctaLabel,
+  demoAnchor,
+  loginLabel,
+  loginHref,
+  siteConfig,
+} from "@/lib/content";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,6 +35,12 @@ export default function Navbar() {
               {link.label}
             </a>
           ))}
+          <Link
+            href={loginHref}
+            className="inline-flex h-12 items-center justify-center rounded-button border border-navy px-5 text-sm font-semibold text-navy hover:bg-navy hover:text-white"
+          >
+            {loginLabel}
+          </Link>
           <a
             href={demoAnchor}
             className="inline-flex h-12 items-center justify-center rounded-button bg-accent px-5 text-sm font-semibold text-navy hover:brightness-110"
@@ -62,6 +76,13 @@ export default function Navbar() {
               {link.label}
             </a>
           ))}
+          <Link
+            href={loginHref}
+            className="mt-2 inline-flex h-12 items-center justify-center rounded-button border border-navy px-5 text-base font-semibold text-navy hover:bg-navy hover:text-white"
+            onClick={() => setIsOpen(false)}
+          >
+            {loginLabel}
+          </Link>
           <a
             href={demoAnchor}
             className="mt-2 inline-flex h-12 items-center justify-center rounded-button bg-accent px-5 text-base font-semibold text-navy hover:brightness-110"
