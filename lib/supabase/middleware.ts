@@ -67,13 +67,15 @@ export async function updateSession(request: NextRequest) {
   // Ayarlar sayfasinin disindaki her korumali rota, profil tamamlanana kadar
   // Ayarlar'a yonlendirilir (sonsuz donguyu onlemek icin kendisi haric).
   if (isProtected && user && pathname !== SETTINGS_PATH) {
-    const { data: hotel } = await supabase
+    // limit(1): kullanicinin birden fazla tesisi olabilir (0003 migration);
+    // burada yalnizca "en az bir tesis var mi" sorusunun cevabi gerekir.
+    const { data: hotels } = await supabase
       .from("hotels")
       .select("id")
       .eq("user_id", user.id)
-      .maybeSingle();
+      .limit(1);
 
-    if (!hotel) {
+    if (!hotels || hotels.length === 0) {
       const settingsUrl = request.nextUrl.clone();
       settingsUrl.pathname = SETTINGS_PATH;
       return NextResponse.redirect(settingsUrl);

@@ -1,21 +1,27 @@
 "use client";
 
 import { useId, useState, type FormEvent } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { hotelSettings } from "@/lib/content";
 import { validateHotelSettings, type HotelSettingsErrors } from "@/lib/validation";
 import { saveHotelSettings } from "@/lib/actions/hotels";
 
 export default function HotelSettingsForm({
+  hotelId,
   initialName,
   initialRoomCount,
   initialBasePrice,
   isFirstRun,
+  isNewMode,
 }: {
+  // null: yeni tesis olusturulur (ilk kayit veya "Yeni Tesis Ekle").
+  hotelId: string | null;
   initialName: string;
   initialRoomCount: string;
   initialBasePrice: string;
   isFirstRun: boolean;
+  isNewMode: boolean;
 }) {
   const router = useRouter();
   const formId = useId();
@@ -42,9 +48,14 @@ export default function HotelSettingsForm({
 
     setSaving(true);
     try {
-      const result = await saveHotelSettings(values);
+      const result = await saveHotelSettings(hotelId, values);
       if (result.success) {
         setSaved(true);
+        if (isNewMode) {
+          // Yeni tesis olusturuldu ve aktif secildi; ?yeni=1 parametresinden
+          // cikip formu yeni aktif tesisle gosterelim.
+          router.push("/dashboard/ayarlar");
+        }
         router.refresh();
       } else if (result.errors) {
         setErrors(result.errors);
@@ -60,8 +71,22 @@ export default function HotelSettingsForm({
 
   return (
     <div className="rounded-card bg-white p-8 shadow-sm">
-      <h1 className="text-2xl font-bold text-navy">{hotelSettings.title}</h1>
-      <p className="mt-2 text-sm text-muted">{hotelSettings.subtitle}</p>
+      <h1 className="text-2xl font-bold text-navy">
+        {isNewMode ? hotelSettings.newHotelTitle : hotelSettings.title}
+      </h1>
+      <p className="mt-2 text-sm text-muted">
+        {isNewMode ? hotelSettings.newHotelSubtitle : hotelSettings.subtitle}
+      </p>
+      {isNewMode && (
+        <p className="mt-1 text-sm">
+          <Link
+            href="/dashboard/ayarlar"
+            className="font-medium text-navy underline hover:text-accent"
+          >
+            {hotelSettings.cancelNewHotelLink}
+          </Link>
+        </p>
+      )}
 
       {isFirstRun && (
         <div className="mt-4 rounded-card bg-sand p-3 text-sm text-navy">

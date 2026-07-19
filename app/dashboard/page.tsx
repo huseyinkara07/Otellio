@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { getHotelForUser } from "@/lib/hotels";
+import { getActiveHotelContext } from "@/lib/activeHotel";
 import { getReservationsForHotel } from "@/lib/reservations";
 import {
   computeOccupancyForecast,
@@ -34,7 +34,9 @@ export default async function DashboardPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const hotel = user ? await getHotelForUser(supabase, user.id) : null;
+  const hotel = user
+    ? (await getActiveHotelContext(supabase, user.id)).hotel
+    : null;
   const reservations = hotel
     ? await getReservationsForHotel(supabase, hotel.id)
     : [];

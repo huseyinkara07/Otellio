@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { getHotelForUser } from "@/lib/hotels";
+import {
+  ACTIVE_HOTEL_COOKIE,
+  getHotelsForUser,
+  pickActiveHotel,
+} from "@/lib/hotels";
 import { upsertReservations, type ReservationInput } from "@/lib/reservations";
 import { MAX_ROWS } from "@/lib/reservationParsing";
 
@@ -41,7 +45,13 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const hotel = await getHotelForUser(supabase, user.id);
+  // Yukleme, paneldeki aktif tesise yapilir; cookie'deki tesis kullanicinin
+  // degilse pickActiveHotel ilk tesise duser (liste RLS ile zaten kisitli).
+  const hotels = await getHotelsForUser(supabase, user.id);
+  const hotel = pickActiveHotel(
+    hotels,
+    request.cookies.get(ACTIVE_HOTEL_COOKIE)?.value
+  );
   if (!hotel) {
     return NextResponse.json(
       { success: false, message: "hotel_not_found" },
