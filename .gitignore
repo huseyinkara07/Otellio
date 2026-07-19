@@ -6,3 +6,5 @@ out
 *.log
 *.pid
 *.tsbuildinfo
+.claude/
+.mcp.json

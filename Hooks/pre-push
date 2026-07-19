@@ -21,6 +21,12 @@ if ! run_typecheck; then
   exit 1
 fi
 
+if ! run_tests; then
+  echo ""
+  echo "PUSH ENGELLENDI: birim testleri basarisiz. Duzeltip tekrar dene ('npm test')."
+  exit 1
+fi
+
 if ! run_build; then
   echo ""
   echo "PUSH ENGELLENDI: build basarisiz. Duzeltip tekrar dene ('npm run build')."

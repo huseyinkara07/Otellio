@@ -1,0 +1,35 @@
+# CI: her PR'da ve master'a giden her push'ta lokal pre-push kancasiyla
+# ayni kontrolleri calistirir (lint, tip kontrolu, birim testleri, build).
+# Boylece kancayi atlayan bir push da (--no-verify) CI'da yakalanir.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Bagimliliklari kur
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Tip kontrolu
+        run: npm run type-check
+
+      - name: Birim testleri
+        run: npm test
+
+      - name: Build
+        run: npm run build
