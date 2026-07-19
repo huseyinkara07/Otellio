@@ -110,6 +110,15 @@ export default function ReservationUploadForm() {
       <h1 className="text-2xl font-bold text-navy">{dataUpload.title}</h1>
       <p className="mt-2 text-sm text-muted">{dataUpload.subtitle}</p>
       <p className="mt-1 text-sm text-muted">{dataUpload.columnsHint}</p>
+      <p className="mt-2 text-sm">
+        <a
+          href={dataUpload.sampleFileHref}
+          download
+          className="font-medium text-navy underline hover:text-accent"
+        >
+          {dataUpload.sampleLinkLabel}
+        </a>
+      </p>
 
       {errorMessage && (
         <div
