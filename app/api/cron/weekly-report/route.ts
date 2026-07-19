@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { pool } from "@/lib/db";
+import { getPool } from "@/lib/db";
 import { buildWeeklyReport } from "@/lib/email/weeklyReport";
 
 // Haftalik rapor cron rotasi. Zamanlanmis gorev (ör. Vercel Cron,
@@ -41,6 +41,7 @@ export async function GET(request: NextRequest) {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://otellio.com";
 
   try {
+    const pool = getPool();
     const { rows: hotels } = await pool.query<HotelRow>(
       `select h.id, h.name, h.room_count, h.base_price, u.email
          from hotels h

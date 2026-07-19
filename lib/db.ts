@@ -2,7 +2,7 @@ import { Pool } from "pg";
 
 // Next.js dev modunda her hot-reload'da modul yeniden calisir; global'e
 // tekilleştirmeden her degisiklikte yeni bir Pool acilir ve baglantilar
-// tukenir. Bu yuzden Pool'u globalThis uzerinde tekil tutuyoruz.
+// tukenir. Bu yuzden Pool globalThis uzerinde tekil tutulur.
 declare global {
   var _otellioPgPool: Pool | undefined;
 }
@@ -17,8 +17,12 @@ function createPool(): Pool {
   return new Pool({ connectionString, max: 5 });
 }
 
-export const pool = globalThis._otellioPgPool ?? createPool();
-
-if (process.env.NODE_ENV !== "production") {
-  globalThis._otellioPgPool = pool;
+// Pool, modul yuklenirken DEGIL ilk kullanimda olusturulur: `next build`
+// sayfa verisi toplarken rota modullerini import eder ve env degiskenlerinin
+// olmadigi ortamlarda (ör. CI) modul seviyesinde olusturma build'i kirar.
+export function getPool(): Pool {
+  if (!globalThis._otellioPgPool) {
+    globalThis._otellioPgPool = createPool();
+  }
+  return globalThis._otellioPgPool;
 }

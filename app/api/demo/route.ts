@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { pool } from "@/lib/db";
+import { getPool } from "@/lib/db";
 import { validateDemoForm, type DemoFormInput } from "@/lib/validation";
 
 // PRD Bolum 8-B: sunucu tarafi validation, rate limiting, bot korumasi ve
@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    await pool.query(
+    await getPool().query(
       `INSERT INTO demo_talepleri (otel_adi, oda_sayisi, email, telefon, mesaj, kvkk_onay)
        VALUES ($1, $2, $3, $4, $5, $6)`,
       [
