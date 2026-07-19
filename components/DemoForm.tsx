@@ -8,19 +8,18 @@ import {
   type SetStateAction,
 } from "react";
 import { demo } from "@/lib/content";
+import {
+  validateDemoForm,
+  type DemoFormErrors,
+  type DemoFormInput,
+} from "@/lib/validation";
 
-type FormState = {
-  hotelName: string;
-  roomCount: string;
-  email: string;
-  phone: string;
-  message: string;
-  kvkk: boolean;
+type FormState = DemoFormInput & {
   // Honeypot: gerçek kullanıcılara görünmez, botlar doldurur.
   company: string;
 };
 
-type FormErrors = Partial<Record<keyof Omit<FormState, "company">, string>>;
+type FormErrors = DemoFormErrors;
 
 const initialState: FormState = {
   hotelName: "",
@@ -32,69 +31,15 @@ const initialState: FormState = {
   company: "",
 };
 
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const PHONE_ALLOWED_CHARS_REGEX = /^[0-9+\s]+$/;
-
-function validate(values: FormState): FormErrors {
-  const errors: FormErrors = {};
-  const { fields } = demo;
-
-  const hotelName = values.hotelName.trim();
-  if (!hotelName) {
-    errors.hotelName = fields.hotelName.errorRequired;
-  } else if (hotelName.length < 2 || hotelName.length > 100) {
-    errors.hotelName = fields.hotelName.errorLength;
-  }
-
-  const roomCountRaw = values.roomCount.trim();
-  const roomCount = Number(roomCountRaw);
-  if (!roomCountRaw) {
-    errors.roomCount = fields.roomCount.errorRequired;
-  } else if (
-    !Number.isInteger(roomCount) ||
-    roomCount < 1 ||
-    roomCount > 2000
-  ) {
-    errors.roomCount = fields.roomCount.errorRange;
-  }
-
-  const email = values.email.trim();
-  if (!email) {
-    errors.email = fields.email.errorRequired;
-  } else if (!EMAIL_REGEX.test(email)) {
-    errors.email = fields.email.errorInvalid;
-  }
-
-  const phone = values.phone.trim();
-  const phoneDigitCount = phone.replace(/\D/g, "").length;
-  if (!phone) {
-    errors.phone = fields.phone.errorRequired;
-  } else if (
-    !PHONE_ALLOWED_CHARS_REGEX.test(phone) ||
-    phoneDigitCount < 10 ||
-    phoneDigitCount > 15
-  ) {
-    errors.phone = fields.phone.errorInvalid;
-  }
-
-  if (values.message.trim().length > 500) {
-    errors.message = fields.message.errorLength;
-  }
-
-  if (!values.kvkk) {
-    errors.kvkk = demo.kvkkError;
-  }
-
-  return errors;
-}
-
 export default function DemoForm() {
   const [values, setValues] = useState<FormState>(initialState);
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
   const formId = useId();
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     // Honeypot doluysa bot kabul edilir, gönderim sessizce yok sayılır.
@@ -102,27 +47,41 @@ export default function DemoForm() {
       return;
     }
 
-    const validationErrors = validate(values);
+    const validationErrors = validateDemoForm(values);
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length > 0) {
       return;
     }
 
-    // TODO: backend entegrasyonu (API route). Bkz. PRD Bölüm 8-B:
-    // HTTPS üzerinden POST, sunucu tarafı validation, rate limiting,
-    // bot koruması ve verinin güvenli/şifreli saklanması gerekecek.
-    console.log("Demo talebi:", {
-      hotelName: values.hotelName,
-      roomCount: values.roomCount,
-      email: values.email,
-      phone: values.phone,
-      message: values.message,
-      kvkk: values.kvkk,
-    });
+    setServerError(null);
+    setSubmitting(true);
 
-    setSubmitted(true);
-    setValues(initialState);
+    try {
+      const response = await fetch("/api/demo", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
+      const data: { success: boolean; errors?: FormErrors } = await response
+        .json()
+        .catch(() => ({ success: false }));
+
+      if (response.ok && data.success) {
+        setSubmitted(true);
+        setValues(initialState);
+      } else if (response.status === 429) {
+        setServerError(demo.rateLimitError);
+      } else if (data.errors) {
+        setErrors(data.errors);
+      } else {
+        setServerError(demo.serverError);
+      }
+    } catch {
+      setServerError(demo.serverError);
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -142,13 +101,24 @@ export default function DemoForm() {
               {demo.successMessage}
             </div>
           ) : (
-            <DemoFormFields
-              values={values}
-              errors={errors}
-              setValues={setValues}
-              formId={formId}
-              onSubmit={handleSubmit}
-            />
+            <>
+              {serverError && (
+                <div
+                  role="alert"
+                  className="mb-4 rounded-card bg-white p-4 text-center text-sm font-medium text-error shadow-sm"
+                >
+                  {serverError}
+                </div>
+              )}
+              <DemoFormFields
+                values={values}
+                errors={errors}
+                setValues={setValues}
+                formId={formId}
+                onSubmit={handleSubmit}
+                submitting={submitting}
+              />
+            </>
           )}
         </div>
       </div>
@@ -162,12 +132,14 @@ function DemoFormFields({
   setValues,
   formId,
   onSubmit,
+  submitting,
 }: {
   values: FormState;
   errors: FormErrors;
   setValues: Dispatch<SetStateAction<FormState>>;
   formId: string;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  submitting: boolean;
 }) {
   return (
     <form
@@ -287,9 +259,11 @@ function DemoFormFields({
 
       <button
         type="submit"
-        className="inline-flex h-12 w-full items-center justify-center rounded-button bg-accent px-8 text-base font-semibold text-navy hover:brightness-110 sm:w-auto"
+        disabled={submitting}
+        aria-busy={submitting}
+        className="inline-flex h-12 w-full items-center justify-center rounded-button bg-accent px-8 text-base font-semibold text-navy hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
       >
-        {demo.submitLabel}
+        {submitting ? "Gönderiliyor..." : demo.submitLabel}
       </button>
     </form>
   );

@@ -10,6 +10,14 @@ const scriptSrc =
     ? "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
     : "script-src 'self' 'unsafe-inline'";
 
+// Supabase Auth/DB istemcisi (lib/supabase/client.ts) tarayicidan dogrudan
+// Supabase projesine fetch atar; bu farkli bir origin oldugu icin CSP'nin
+// connect-src'ine acikca eklenmesi gerekir, yoksa tarayici "Failed to fetch"
+// ile sessizce engeller.
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseOrigin = supabaseUrl ? new URL(supabaseUrl).origin : "";
+const connectSrc = ["'self'", supabaseOrigin].filter(Boolean).join(" ");
+
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "X-Frame-Options", value: "DENY" },
@@ -26,7 +34,7 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data:",
       "font-src 'self' data:",
-      "connect-src 'self'",
+      `connect-src ${connectSrc}`,
       "frame-ancestors 'none'",
     ].join("; "),
   },
