@@ -349,6 +349,8 @@ export const dataUpload = {
     "Geçmiş rezervasyon verinizi Excel (.xlsx) veya CSV dosyası olarak yükleyin.",
   columnsHint:
     "Dosyanızda şu sütunlar olmalı: Tarih, Satılan Oda Sayısı. İsteğe bağlı olarak Gelir sütunu da eklenebilir.",
+  sampleLinkLabel: "Örnek dosyayı indirin (.csv)",
+  sampleFileHref: "/ornek-rezervasyon.csv",
   dropzoneLabel: "Dosyayı buraya sürükleyin veya seçmek için tıklayın",
   dropzoneHint: "En fazla 5 MB, .xlsx veya .csv, en fazla 5.000 satır",
   chooseFileLabel: "Dosya Seç",

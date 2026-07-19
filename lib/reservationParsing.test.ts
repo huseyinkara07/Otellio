@@ -15,6 +15,15 @@ describe("parseReservationSheet", () => {
     ]);
   });
 
+  it("UTF-8 BOM ile baslayan basliklari tanir (Excel CSV disa aktarimi)", () => {
+    const outcome = parseReservationSheet([
+      ["﻿Tarih", "Satılan Oda Sayısı"],
+      ["2025-07-01", 10],
+    ]);
+    expect(outcome.errorCode).toBeUndefined();
+    expect(outcome.rows).toHaveLength(1);
+  });
+
   it("BUYUK harfli Turkce basliklari da tanir (İ -> i)", () => {
     const outcome = parseReservationSheet([
       ["TARİH", "DOLU ODA"],
