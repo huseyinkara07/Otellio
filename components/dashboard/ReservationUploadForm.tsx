@@ -19,6 +19,7 @@ export default function ReservationUploadForm() {
 
   const [parsing, setParsing] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [dragActive, setDragActive] = useState(false);
   const [rows, setRows] = useState<ParsedReservationRow[]>([]);
   const [skippedCount, setSkippedCount] = useState(0);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -128,9 +129,24 @@ export default function ReservationUploadForm() {
         </div>
       )}
 
+      {/* Tarayicinin varsayilani, birakilan dosyayi sayfa olarak acmaktir;
+          dragover'daki preventDefault dosyanin buraya birakilabilmesini saglar. */}
       <label
         htmlFor="reservation-file"
-        className="mt-6 flex cursor-pointer flex-col items-center justify-center gap-2 rounded-card border-2 border-dashed border-black/15 p-10 text-center hover:border-accent"
+        onDragOver={(e) => {
+          e.preventDefault();
+          setDragActive(true);
+        }}
+        onDragLeave={() => setDragActive(false)}
+        onDrop={(e) => {
+          e.preventDefault();
+          setDragActive(false);
+          const file = e.dataTransfer.files?.[0];
+          if (file) handleFile(file);
+        }}
+        className={`mt-6 flex cursor-pointer flex-col items-center justify-center gap-2 rounded-card border-2 border-dashed p-10 text-center hover:border-accent ${
+          dragActive ? "border-accent bg-sand" : "border-black/15"
+        }`}
       >
         <UploadCloud className="h-8 w-8 text-muted" aria-hidden="true" />
         <span className="font-medium text-navy">
