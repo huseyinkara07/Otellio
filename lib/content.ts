@@ -433,6 +433,27 @@ export const performancePage = {
   uploadCta: "Veri Yükle",
 };
 
+export const weeklyReportEmail = {
+  subjectPrefix: "Otellio Haftalık Özet",
+  greetingPrefix: "Merhaba",
+  intro:
+    "Önümüzdeki günler için doluluk tahmininiz ve fiyat önerileriniz hazır.",
+  weekTitle: "Önümüzdeki 7 Gün",
+  avgOccupancyLabel: "Ortalama doluluk tahmini",
+  avgPriceLabel: "Ortalama önerilen fiyat",
+  busyTitle: "Yoğun görünen günler",
+  busyHint: "Fiyatınızı gözden geçirmek için iyi bir zaman.",
+  quietTitle: "Sakin görünen günler",
+  quietHint: "Erken davranarak satışı destekleyebilirsiniz.",
+  occupancyLabel: "Tahmini doluluk",
+  suggestedPriceLabel: "Önerilen fiyat",
+  ctaLabel: "Panele Git",
+  disclaimer:
+    "Bu rakamlar geçmiş verinize dayalı tahminlerdir; son karar her zaman sizindir.",
+  footerNote:
+    "Bu e-postayı, Otellio hesabınızın haftalık rapor özelliği nedeniyle aldınız.",
+};
+
 export const footer = {
   tagline:
     "Otellio — küçük ve orta ölçekli oteller için sade doluluk tahmini ve fiyat önerisi.",
