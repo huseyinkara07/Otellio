@@ -281,6 +281,7 @@ export const dashboard = {
     { label: "Veri Yükle", href: "/dashboard/veri-yukle" },
     { label: "Doluluk Tahmini", href: "/dashboard/tahmin" },
     { label: "Fiyat Önerisi", href: "/dashboard/fiyat-onerisi" },
+    { label: "Geçmiş Performans", href: "/dashboard/gecmis-performans" },
     { label: "Ayarlar", href: "/dashboard/ayarlar" },
   ],
   logoutLabel: "Çıkış Yap",
@@ -409,6 +410,26 @@ export const priceSuggestionPage = {
   insufficientDataTitle: "Henüz yeterli veri yok",
   insufficientDataBody:
     "Fiyat önerisi oluşturabilmemiz için önce Veri Yükle sayfasından geçmiş rezervasyon verinizi eklemeniz gerekiyor.",
+  uploadCta: "Veri Yükle",
+};
+
+export const performancePage = {
+  title: "Geçmiş Performans",
+  subtitle:
+    "Yüklediğiniz rezervasyon verisine göre aylık doluluk ve gelir özetiniz.",
+  columnMonth: "Ay",
+  columnDays: "Veri Günü",
+  columnOccupancy: "Ort. Doluluk",
+  columnRoomsSold: "Satılan Oda",
+  columnRevenue: "Toplam Gelir",
+  columnRevenuePerRoom: "Oda Başına Ort. Gelir",
+  columnYoY: "Geçen Yılın Aynı Ayına Göre",
+  yoyPointsSuffix: "puan",
+  revenueNote:
+    "Gelir alanları, dosyanızda Gelir sütunu bulunan günler üzerinden hesaplanır; gelir verisi olmayan aylar boş görünür.",
+  emptyTitle: "Henüz veri yok",
+  emptyBody:
+    "Geçmiş performansınızı görebilmek için önce rezervasyon verinizi yükleyin.",
   uploadCta: "Veri Yükle",
 };
 
