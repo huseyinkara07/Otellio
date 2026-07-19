@@ -1,9 +1,15 @@
-// Basit istatistiksel doluluk tahmini motoru: haftanin gunune gore mevsimsel
-// ortalama (seasonal-naive) + son donem/onceki donem karsilastirmasindan
-// gelen bir trend katsayisi. Gercek bir zaman serisi modeline (ör. SARIMA,
-// bkz. PRD'deki kurucu notu) gecilmek istenirse yalnizca bu dosyanin
-// export ettigi computeOccupancyForecast fonksiyonu degistirilir; cagiran
-// sayfa kodunun (app/dashboard/tahmin) haberi olmaz.
+// Basit istatistiksel doluluk tahmini motoru, uc bilesenin carpimi:
+//   1. Haftanin gunune gore ortalama (seasonal-naive taban cizgisi),
+//   2. Yilin ayina gore sezon endeksi (Antalya'da yaz/kis farki haftanin
+//      gunu farkindan cok daha buyuk; yeterli veri olan aylar icin ayin
+//      ortalamasi / genel ortalama orani kullanilir),
+//   3. Son donem/onceki donem karsilastirmasindan gelen trend katsayisi
+//      (sezon gecisinin trend sanilmamasi icin karsilastirma, sezon
+//      endeksinden arindirilmis degerler uzerinden yapilir).
+// Gercek bir zaman serisi modeline (ör. SARIMA, bkz. PRD'deki kurucu notu)
+// gecilmek istenirse yalnizca bu dosyanin export ettigi
+// computeOccupancyForecast fonksiyonu degistirilir; cagiran sayfa kodunun
+// (app/dashboard/tahmin) haberi olmaz.
 
 export type ForecastPoint = {
   date: string;
@@ -21,6 +27,11 @@ const RECENT_WINDOW_DAYS = 28;
 const MIN_TREND_FACTOR = 0.7;
 const MAX_TREND_FACTOR = 1.3;
 const MIN_INTERVAL = 0.05;
+// Sezon endeksi ancak o aya ait yeterli gozlem varsa hesaplanir; az veriyle
+// tek tuk gunlerden ay geneli hakkinda hukum verilmez (endeks 1 kalir).
+const MIN_MONTH_POINTS = 8;
+const MIN_MONTH_FACTOR = 0.5;
+const MAX_MONTH_FACTOR = 1.6;
 
 function clamp01(value: number): number {
   return Math.min(1, Math.max(0, value));
@@ -82,6 +93,21 @@ export function computeOccupancyForecast(
 
   const overallAvg = average(history.map((h) => h.occupancyRate));
 
+  // Aylik sezon endeksi: yeterli gozlemi olan aylar icin ayin ortalamasinin
+  // genel ortalamaya orani. Veri olmayan/az olan aylar notr (1) kalir.
+  const byMonth: number[][] = Array.from({ length: 12 }, () => []);
+  for (const point of history) {
+    byMonth[parseISODate(point.date).getMonth()].push(point.occupancyRate);
+  }
+  const monthIndex: number[] = byMonth.map((values) => {
+    if (values.length < MIN_MONTH_POINTS || overallAvg <= 0.01) return 1;
+    return clamp(
+      average(values) / overallAvg,
+      MIN_MONTH_FACTOR,
+      MAX_MONTH_FACTOR
+    );
+  });
+
   const recentCutoff = new Date(today);
   recentCutoff.setDate(recentCutoff.getDate() - RECENT_WINDOW_DAYS);
   const priorCutoff = new Date(today);
@@ -95,10 +121,16 @@ export function computeOccupancyForecast(
     return d > priorCutoff && d <= recentCutoff;
   });
 
+  // Trend, sezon endeksinden arindirilmis degerlerle olculur; yoksa ornegin
+  // Mayis->Haziran gecisindeki dogal sezon yukselisi hem trend hem sezon
+  // olarak iki kez sayilirdi.
+  const deseasonalized = (h: { date: string; occupancyRate: number }) =>
+    h.occupancyRate / monthIndex[parseISODate(h.date).getMonth()];
+
   let trendFactor = 1;
   if (recentPoints.length >= 5 && priorPoints.length >= 5) {
-    const recentAvg = average(recentPoints.map((p) => p.occupancyRate));
-    const priorAvg = average(priorPoints.map((p) => p.occupancyRate));
+    const recentAvg = average(recentPoints.map(deseasonalized));
+    const priorAvg = average(priorPoints.map(deseasonalized));
     if (priorAvg > 0.01) {
       trendFactor = clamp(
         recentAvg / priorAvg,
@@ -116,7 +148,9 @@ export function computeOccupancyForecast(
 
     const baseline =
       weekdayValues.length >= 2 ? average(weekdayValues) : overallAvg;
-    const occupancyRate = clamp01(baseline * trendFactor);
+    const occupancyRate = clamp01(
+      baseline * monthIndex[futureDate.getMonth()] * trendFactor
+    );
 
     const spread = weekdayValues.length >= 3 ? stddev(weekdayValues) : 0;
     const interval = Math.max(spread, MIN_INTERVAL);
