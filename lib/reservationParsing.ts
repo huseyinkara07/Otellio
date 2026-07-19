@@ -40,6 +40,9 @@ const REVENUE_HEADERS = [
 
 function normalizeHeader(value: unknown): string {
   return String(value ?? "")
+    // Excel'in UTF-8 CSV disa aktarimlari dosya basina BOM (U+FEFF) koyar;
+    // ayiklanmazsa ilk baslik hucresi eslesmez ve sutun bulunamaz.
+    .replace(/﻿/g, "")
     .trim()
     .toLocaleLowerCase("tr");
 }
