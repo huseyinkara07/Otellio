@@ -8,10 +8,17 @@ import { createClient } from "@/lib/supabase/client";
 
 const MIN_PASSWORD_LENGTH = 8;
 
-// E-postadaki sifre sifirlama baglantisi kullaniciyi buraya getirir.
-// Supabase istemcisi URL'deki kurtarma kodunu ilk olusturuldugunda kendisi
-// dogrulayip gecici bir oturum acar (detectSessionInUrl); bu sayfa yalnizca
-// bu oturumun olusup olusmadigini dinler ve yeni sifreyi kaydeder.
+// E-postadaki sifre sifirlama VEYA hesap daveti baglantisi kullaniciyi
+// buraya getirir. Iki dogrulama yolu desteklenir:
+//   1. token_hash'li dogrudan baglanti (Supabase e-posta sablonlarinda
+//      {{ .SiteURL }}/sifre-yenile?token_hash={{ .TokenHash }}&type=invite
+//      seklinde kurgulanir) -> verifyOtp ile oturum acilir.
+//   2. Klasik redirect'li baglanti -> Supabase istemcisi URL'deki kodu ilk
+//      olusturuldugunda kendisi dogrular (detectSessionInUrl); sayfa yalnizca
+//      olusan oturumu dinler.
+// Oturum acildiktan sonra kullanici yeni sifresini belirler; davetle gelen
+// kullanici sifre sonrasi middleware tarafindan otel bilgileri onboarding'ine
+// (/dashboard/ayarlar) yonlendirilir.
 type LinkStatus = "checking" | "ready" | "invalid";
 
 export default function ResetPasswordPage() {
@@ -31,6 +38,17 @@ export default function ResetPasswordPage() {
 
   useEffect(() => {
     const supabase = createClient();
+
+    const params = new URLSearchParams(window.location.search);
+    const tokenHash = params.get("token_hash");
+    const otpType = params.get("type");
+
+    if (tokenHash && (otpType === "invite" || otpType === "recovery")) {
+      supabase.auth
+        .verifyOtp({ token_hash: tokenHash, type: otpType })
+        .then(({ error }) => setLinkStatus(error ? "invalid" : "ready"));
+      return;
+    }
 
     // INITIAL_SESSION, URL'deki kurtarma kodunun dogrulanmasi bittikten
     // sonra yayinlanir: oturum varsa baglanti gecerli, yoksa gecersiz/suresi
