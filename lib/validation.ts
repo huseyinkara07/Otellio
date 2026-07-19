@@ -14,7 +14,8 @@ export type DemoFormInput = {
 
 export type DemoFormErrors = Partial<Record<keyof DemoFormInput, string>>;
 
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// Şifre sıfırlama sayfası da aynı kuralı kullanır; export bu yüzden.
+export const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_ALLOWED_CHARS_REGEX = /^[0-9+\s]+$/;
 
 export function validateDemoForm(values: DemoFormInput): DemoFormErrors {

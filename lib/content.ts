@@ -229,6 +229,7 @@ export const auth = {
   passwordPlaceholder: "••••••••",
   submitLabel: "Giriş Yap",
   submittingLabel: "Giriş yapılıyor...",
+  forgotPasswordLink: "Şifrenizi mi unuttunuz?",
   backToHome: "Anasayfaya dön",
   noAccountText: "Henüz hesabınız yok mu?",
   requestDemoLink: "Demo isteyin",
@@ -237,6 +238,39 @@ export const auth = {
     passwordRequired: "Lütfen şifrenizi girin.",
     invalidCredentials: "E-posta veya şifre hatalı.",
     generic: "Giriş yapılamadı. Lütfen tekrar deneyin.",
+  },
+};
+
+export const passwordReset = {
+  requestTitle: "Şifrenizi sıfırlayın",
+  requestSubtitle:
+    "Kayıtlı e-posta adresinizi girin; size şifre sıfırlama bağlantısı gönderelim.",
+  emailLabel: "E-posta",
+  emailPlaceholder: "ornek@otel.com",
+  requestSubmitLabel: "Sıfırlama Bağlantısı Gönder",
+  requestSubmittingLabel: "Gönderiliyor...",
+  requestSuccessMessage:
+    "Bu e-posta ile kayıtlı bir hesap varsa, şifre sıfırlama bağlantısını gönderdik. Gelen kutunuzu ve gereksiz e-posta klasörünüzü kontrol edin.",
+  backToLogin: "Giriş sayfasına dön",
+  updateTitle: "Yeni şifrenizi belirleyin",
+  updateSubtitle: "Panele girişte kullanacağınız yeni şifrenizi oluşturun.",
+  passwordLabel: "Yeni şifre",
+  passwordConfirmLabel: "Yeni şifre (tekrar)",
+  updateSubmitLabel: "Şifreyi Güncelle",
+  updateSubmittingLabel: "Güncelleniyor...",
+  updateSuccessMessage: "Şifreniz güncellendi. Panele yönlendiriliyorsunuz...",
+  checkingLinkLabel: "Bağlantınız doğrulanıyor...",
+  invalidLinkTitle: "Bağlantı geçersiz veya süresi dolmuş",
+  invalidLinkBody:
+    "Şifre sıfırlama bağlantıları güvenlik nedeniyle kısa bir süre geçerlidir. Yeni bir bağlantı isteyerek tekrar deneyebilirsiniz.",
+  requestNewLink: "Yeni bağlantı isteyin",
+  errors: {
+    emailRequired: "Lütfen e-posta adresinizi girin.",
+    emailInvalid: "Lütfen geçerli bir e-posta girin.",
+    passwordRequired: "Lütfen yeni şifrenizi girin.",
+    passwordTooShort: "Şifre en az 8 karakter olmalı.",
+    passwordMismatch: "Şifreler birbiriyle eşleşmiyor.",
+    generic: "İşlem tamamlanamadı. Lütfen tekrar deneyin.",
   },
 };
 

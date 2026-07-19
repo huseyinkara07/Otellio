@@ -161,6 +161,14 @@ function LoginForm() {
                   {fieldErrors.password}
                 </p>
               )}
+              <p className="mt-2 text-right text-sm">
+                <Link
+                  href="/sifremi-unuttum"
+                  className="font-medium text-navy underline hover:text-accent"
+                >
+                  {auth.forgotPasswordLink}
+                </Link>
+              </p>
             </div>
 
             <button
