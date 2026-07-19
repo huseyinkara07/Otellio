@@ -23,6 +23,8 @@ export const navLinks = [
 
 export const ctaLabel = "Demo İste";
 export const demoAnchor = "#demo";
+export const loginLabel = "Giriş Yap";
+export const loginHref = "/login";
 
 export const hero = {
   title: "Odanız boş kalmadan önce bilin.",
@@ -177,6 +179,10 @@ export const demo = {
     "Bilgilerinizi bırakın, size uygun bir zamanda Otellio'yu otelinizin verisiyle gösterelim.",
   submitLabel: "Talep Gönder",
   successMessage: "Talebiniz alındı. En kısa sürede sizinle iletişime geçeceğiz.",
+  serverError:
+    "Talebiniz gönderilemedi. Lütfen daha sonra tekrar deneyin veya bizi e-posta ile bulun.",
+  rateLimitError:
+    "Kısa süre içinde çok fazla talep gönderildi. Lütfen birkaç dakika sonra tekrar deneyin.",
   kvkkText:
     "Kişisel verilerimin, demo talebimi değerlendirmek amacıyla işlenmesini kabul ediyorum.",
   kvkkLinkText: "Aydınlatma Metni",
@@ -212,6 +218,151 @@ export const demo = {
       errorLength: "Mesaj en fazla 500 karakter olabilir.",
     },
   },
+};
+
+export const auth = {
+  title: "Otel panelinize giriş yapın",
+  subtitle: "E-posta ve şifrenizle giriş yaparak doluluk tahmini ve fiyat önerilerinize ulaşın.",
+  emailLabel: "E-posta",
+  emailPlaceholder: "ornek@otel.com",
+  passwordLabel: "Şifre",
+  passwordPlaceholder: "••••••••",
+  submitLabel: "Giriş Yap",
+  submittingLabel: "Giriş yapılıyor...",
+  backToHome: "Anasayfaya dön",
+  noAccountText: "Henüz hesabınız yok mu?",
+  requestDemoLink: "Demo isteyin",
+  errors: {
+    emailRequired: "Lütfen e-posta adresinizi girin.",
+    passwordRequired: "Lütfen şifrenizi girin.",
+    invalidCredentials: "E-posta veya şifre hatalı.",
+    generic: "Giriş yapılamadı. Lütfen tekrar deneyin.",
+  },
+};
+
+export const dashboard = {
+  brand: "Otellio",
+  navItems: [
+    { label: "Genel Bakış", href: "/dashboard" },
+    { label: "Veri Yükle", href: "/dashboard/veri-yukle" },
+    { label: "Doluluk Tahmini", href: "/dashboard/tahmin" },
+    { label: "Fiyat Önerisi", href: "/dashboard/fiyat-onerisi" },
+    { label: "Ayarlar", href: "/dashboard/ayarlar" },
+  ],
+  logoutLabel: "Çıkış Yap",
+  welcomePrefix: "Hoş geldiniz",
+  openMenuLabel: "Menüyü aç",
+  closeMenuLabel: "Menüyü kapat",
+};
+
+export const overview = {
+  title: "Genel Bakış",
+  statRoomCount: "Oda Sayısı",
+  statLastUpload: "Son Veri Yüklemesi",
+  statAvgOccupancy: "Bu Haftaki Ortalama Doluluk Tahmini",
+  statAvgPrice: "Ortalama Önerilen Fiyat",
+  noDataTitle: "Başlamak için verinizi yükleyin",
+  noDataBody:
+    "Geçmiş rezervasyon verinizi yükleyerek doluluk tahmini ve fiyat önerilerinize ulaşabilirsiniz.",
+  uploadCta: "Veri Yükle",
+};
+
+export const hotelSettings = {
+  title: "Otel Bilgileri",
+  subtitle:
+    "Doluluk tahmini ve fiyat önerisi için otelinize dair birkaç temel bilgiye ihtiyacımız var.",
+  firstRunNotice:
+    "Panele hoş geldiniz. Devam etmeden önce otel bilgilerinizi tamamlayın.",
+  nameLabel: "Otel adı",
+  namePlaceholder: "Örn. Deniz Manzara Otel",
+  roomCountLabel: "Oda sayısı",
+  roomCountPlaceholder: "Örn. 45",
+  basePriceLabel: "Taban fiyatınız (gecelik, TL)",
+  basePriceHint:
+    "Fiyat önerileri bu tutara göre hesaplanır; dilediğinizde güncelleyebilirsiniz.",
+  basePricePlaceholder: "Örn. 1500",
+  saveLabel: "Kaydet",
+  savingLabel: "Kaydediliyor...",
+  savedMessage: "Bilgileriniz kaydedildi.",
+  errors: {
+    nameRequired: "Lütfen otel adını girin.",
+    nameLength: "Otel adı 2-100 karakter arasında olmalı.",
+    roomCountRequired: "Lütfen oda sayısını girin.",
+    roomCountRange: "Oda sayısı 1-2000 arasında bir tam sayı olmalı.",
+    basePriceRequired: "Lütfen taban fiyatınızı girin.",
+    basePriceRange: "Taban fiyat 0'dan büyük olmalı.",
+    generic: "Kaydedilemedi. Lütfen tekrar deneyin.",
+  },
+};
+
+export const dataUpload = {
+  title: "Veri Yükle",
+  subtitle:
+    "Geçmiş rezervasyon verinizi Excel (.xlsx) veya CSV dosyası olarak yükleyin.",
+  columnsHint:
+    "Dosyanızda şu sütunlar olmalı: Tarih, Satılan Oda Sayısı. İsteğe bağlı olarak Gelir sütunu da eklenebilir.",
+  dropzoneLabel: "Dosyayı buraya sürükleyin veya seçmek için tıklayın",
+  dropzoneHint: "En fazla 5 MB, .xlsx veya .csv, en fazla 5.000 satır",
+  chooseFileLabel: "Dosya Seç",
+  parsingLabel: "Dosya okunuyor...",
+  previewTitle: "Önizleme",
+  rowsFoundSuffix: "satır bulundu.",
+  skippedRowsSuffix: "satır, eksik/hatalı veri nedeniyle atlandı.",
+  saveLabel: "Kaydet",
+  savingLabel: "Kaydediliyor...",
+  savedPrefix: "Kaydedildi:",
+  savedSuffix: "satır güncellendi.",
+  columnDate: "Tarih",
+  columnRoomsSold: "Satılan Oda",
+  columnRevenue: "Gelir",
+  errors: {
+    fileTooLarge: "Dosya 5 MB sınırını aşıyor.",
+    tooManyRows:
+      "Dosyada 5.000'den fazla satır var. Lütfen daha küçük bir dosya yükleyin.",
+    noValidRows:
+      "Dosyada geçerli satır bulunamadı. Sütun adlarını ve veri biçimini kontrol edin.",
+    parseFailed:
+      "Dosya okunamadı. Lütfen geçerli bir Excel veya CSV dosyası yükleyin.",
+    saveFailed: "Veriler kaydedilemedi. Lütfen tekrar deneyin.",
+    unsupportedType: "Yalnızca .xlsx veya .csv dosyaları desteklenir.",
+  },
+};
+
+export const forecastPage = {
+  title: "Doluluk Tahmini",
+  subtitle: "Önümüzdeki günler için tahmini doluluk oranınız.",
+  rangeLabel: "Gösterilecek dönem",
+  range30: "30 gün",
+  range60: "60 gün",
+  range90: "90 gün",
+  chartOccupancyLabel: "Tahmini Doluluk (%)",
+  chartRangeLabel: "Tahmin Aralığı",
+  tableTitle: "Günlük Detay",
+  columnDate: "Tarih",
+  columnOccupancy: "Tahmini Doluluk",
+  columnRange: "Aralık",
+  insufficientDataTitle: "Henüz yeterli veri yok",
+  insufficientDataBody:
+    "Anlamlı bir tahmin oluşturabilmemiz için en az 14 günlük geçmiş rezervasyon verisi gerekiyor. Veri Yükle sayfasından dosyanızı ekleyin.",
+  uploadCta: "Veri Yükle",
+  disclaimer:
+    "Bu rakamlar geçmiş verinize dayalı bir tahmindir; resmi tatiller ve beklenmedik talep değişimlerini yansıtmayabilir.",
+};
+
+export const priceSuggestionPage = {
+  title: "Fiyat Önerisi",
+  subtitle: "Tahmini doluluğunuza göre önerilen gecelik fiyatlar.",
+  columnDate: "Tarih",
+  columnOccupancy: "Tahmini Doluluk",
+  columnSuggestedPrice: "Önerilen Fiyat",
+  basePriceLabel: "Taban fiyatınız",
+  editBasePriceLink: "Ayarlar'dan düzenleyin",
+  disclaimer:
+    "Bu fiyatlar bir öneridir, garanti değildir; son kararı her zaman siz verirsiniz.",
+  insufficientDataTitle: "Henüz yeterli veri yok",
+  insufficientDataBody:
+    "Fiyat önerisi oluşturabilmemiz için önce Veri Yükle sayfasından geçmiş rezervasyon verinizi eklemeniz gerekiyor.",
+  uploadCta: "Veri Yükle",
 };
 
 export const footer = {
