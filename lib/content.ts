@@ -286,6 +286,7 @@ export const dashboard = {
   ],
   logoutLabel: "Çıkış Yap",
   welcomePrefix: "Hoş geldiniz",
+  activeHotelLabel: "Aktif tesis",
   openMenuLabel: "Menüyü aç",
   closeMenuLabel: "Menüyü kapat",
 };
@@ -332,6 +333,11 @@ export const hotelSettings = {
   saveLabel: "Kaydet",
   savingLabel: "Kaydediliyor...",
   savedMessage: "Bilgileriniz kaydedildi.",
+  newHotelCta: "Yeni Tesis Ekle",
+  newHotelTitle: "Yeni Tesis",
+  newHotelSubtitle:
+    "Yeni tesisiniz için temel bilgileri girin; kaydettiğinizde panel bu tesisi göstermeye başlar.",
+  cancelNewHotelLink: "Vazgeç",
   errors: {
     nameRequired: "Lütfen otel adını girin.",
     nameLength: "Otel adı 2-100 karakter arasında olmalı.",

@@ -3,8 +3,10 @@ import { redirect } from "next/navigation";
 import { LogOut } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { signOut } from "@/lib/actions/auth";
+import { getActiveHotelContext } from "@/lib/activeHotel";
 import { dashboard } from "@/lib/content";
 import DashboardNav from "@/components/dashboard/DashboardNav";
+import HotelSwitcher from "@/components/dashboard/HotelSwitcher";
 import MobileNav from "@/components/dashboard/MobileNav";
 
 export default async function DashboardLayout({
@@ -24,6 +26,11 @@ export default async function DashboardLayout({
     redirect("/login");
   }
 
+  const { hotels, hotel: activeHotel } = await getActiveHotelContext(
+    supabase,
+    user.id
+  );
+
   return (
     <div className="flex min-h-screen bg-sand">
       <aside className="hidden w-64 shrink-0 flex-col bg-navy text-white md:flex">
@@ -42,7 +49,13 @@ export default async function DashboardLayout({
             </div>
           </div>
           <div className="ml-auto flex items-center gap-4">
-            <span className="hidden text-sm text-muted sm:inline">
+            {activeHotel && (
+              <HotelSwitcher
+                hotels={hotels.map((h) => ({ id: h.id, name: h.name }))}
+                activeHotelId={activeHotel.id}
+              />
+            )}
+            <span className="hidden text-sm text-muted lg:inline">
               {dashboard.welcomePrefix}, {user.email}
             </span>
             <form action={signOut}>

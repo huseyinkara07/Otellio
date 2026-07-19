@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { getHotelForUser } from "@/lib/hotels";
+import { getActiveHotelContext } from "@/lib/activeHotel";
 import { getReservationsForHotel } from "@/lib/reservations";
 import { computeOccupancyForecast } from "@/lib/forecast/simpleForecast";
 import { computePriceSuggestions } from "@/lib/forecast/priceSuggestion";
@@ -14,7 +14,9 @@ export default async function PriceSuggestionRoutePage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const hotel = user ? await getHotelForUser(supabase, user.id) : null;
+  const hotel = user
+    ? (await getActiveHotelContext(supabase, user.id)).hotel
+    : null;
   const reservations = hotel
     ? await getReservationsForHotel(supabase, hotel.id)
     : [];
