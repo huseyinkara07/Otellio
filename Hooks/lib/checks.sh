@@ -12,6 +12,11 @@ run_typecheck() {
   npm run --silent type-check
 }
 
+run_tests() {
+  echo "-> vitest (npm test)"
+  npm run --silent test
+}
+
 run_build() {
   echo "-> next build (npm run build)"
   npm run --silent build
