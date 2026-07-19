@@ -265,6 +265,19 @@ export const overview = {
   noDataBody:
     "Geçmiş rezervasyon verinizi yükleyerek doluluk tahmini ve fiyat önerilerinize ulaşabilirsiniz.",
   uploadCta: "Veri Yükle",
+  forecastCardTitle: "Önümüzdeki 30 Gün — Doluluk Tahmini",
+  forecastDetailLink: "Detaylı tahmini görün",
+  highlightsTitle: "Öne Çıkan Günler",
+  busyTitle: "Yoğun görünen günler",
+  busyHint:
+    "Talep yüksek görünüyor; fiyatınızı gözden geçirmek için iyi bir zaman.",
+  quietTitle: "Sakin görünen günler",
+  quietHint:
+    "Doluluk düşük görünüyor; erken davranarak satışı destekleyebilirsiniz.",
+  occupancyLabel: "Tahmini doluluk",
+  suggestedPriceLabel: "Önerilen fiyat",
+  highlightsDisclaimer:
+    "Bu günler geçmiş verinize dayalı tahminlerdir; son karar her zaman sizindir.",
 };
 
 export const hotelSettings = {
