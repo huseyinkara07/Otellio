@@ -186,6 +186,7 @@ export const demo = {
   kvkkText:
     "Kişisel verilerimin, demo talebimi değerlendirmek amacıyla işlenmesini kabul ediyorum.",
   kvkkLinkText: "Aydınlatma Metni",
+  kvkkLinkHref: "/kvkk",
   kvkkError: "Devam etmek için KVKK onayını işaretlemelisiniz.",
   fields: {
     hotelName: {
@@ -468,8 +469,8 @@ export const footer = {
   email: siteConfig.email,
   links: navLinks,
   legalLinks: [
-    { label: "KVKK Aydınlatma Metni", href: "#" },
-    { label: "Gizlilik Politikası", href: "#" },
+    { label: "KVKK Aydınlatma Metni", href: "/kvkk" },
+    { label: "Gizlilik Politikası", href: "/gizlilik" },
   ],
   copyright: "© 2026 Otellio. Tüm hakları saklıdır.",
 };
