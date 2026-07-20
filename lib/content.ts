@@ -107,6 +107,7 @@ export const pricing = {
   note: "Gösterge fiyatlardır, KDV hariçtir.",
   plans: [
     {
+      id: "baslangic",
       name: "Başlangıç",
       target: "30 odaya kadar",
       price: "~750–1.000 TL/ay",
@@ -115,6 +116,7 @@ export const pricing = {
       highlighted: false,
     },
     {
+      id: "standart",
       name: "Standart",
       badge: "En Popüler",
       target: "31–100 oda",
@@ -128,6 +130,7 @@ export const pricing = {
       highlighted: true,
     },
     {
+      id: "kurumsal",
       name: "Kurumsal",
       target: "100+ oda veya çoklu tesis",
       price: "~4.000–6.000 TL/ay veya Bize Ulaşın",
@@ -283,6 +286,7 @@ export const dashboard = {
     { label: "Doluluk Tahmini", href: "/dashboard/tahmin" },
     { label: "Fiyat Önerisi", href: "/dashboard/fiyat-onerisi" },
     { label: "Geçmiş Performans", href: "/dashboard/gecmis-performans" },
+    { label: "Abonelik", href: "/dashboard/abonelik" },
     { label: "Ayarlar", href: "/dashboard/ayarlar" },
   ],
   logoutLabel: "Çıkış Yap",
@@ -461,6 +465,27 @@ export const weeklyReportEmail = {
     "Bu rakamlar geçmiş verinize dayalı tahminlerdir; son karar her zaman sizindir.",
   footerNote:
     "Bu e-postayı, Otellio hesabınızın haftalık rapor özelliği nedeniyle aldınız.",
+};
+
+export const subscription = {
+  title: "Aboneliğiniz",
+  subtitle: "Mevcut planınız ve paket seçenekleriniz.",
+  currentPlanLabel: "Mevcut planınız",
+  statusLabels: {
+    trial: "Deneme",
+    active: "Etkin",
+    past_due: "Ödeme bekleniyor",
+    canceled: "İptal edildi",
+  } as Record<string, string>,
+  includesLabel: "Bu pakete dahil olanlar:",
+  currentBadge: "Mevcut plan",
+  otherPlansTitle: "Diğer paketler",
+  // Odeme entegrasyonu henuz yok; yukseltme su an iletisim uzerinden manuel
+  // yapilir. Gercek tahsilat eklendiginde bu CTA odeme akisiyla degistirilir.
+  upgradeCta: "Yükseltmek için bize ulaşın",
+  upgradeHref: "mailto:info@otellio.com?subject=Otellio%20paket%20yükseltme",
+  manualNote:
+    "Paket değişiklikleri şu anda bizimle iletişime geçilerek yapılmaktadır. Otomatik ödeme yakında eklenecektir.",
 };
 
 export const footer = {
